@@ -5,7 +5,7 @@ import 'package:shoplg/routes/routes.dart';
 import 'theme/light_theme.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -14,11 +14,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'E-commerce App',
+      title: 'ShopLG',
       theme: AppTheme.lightTheme,
       initialRoute: AppRoutes.home,
       onGenerateRoute: AppRoutes.generateRoute,
       home: const HomePage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

@@ -1,19 +1,86 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-class HomeContent extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shoplg/core/utils/api_base_url.dart';
+import 'package:shoplg/widgets/h_product_card.dart';
+import 'package:shoplg/widgets/product_card.dart';
+
+class HomeContent extends StatefulWidget {
   const HomeContent({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
+  _HomeContentState createState() => _HomeContentState();
+}
+
+class _HomeContentState extends State<HomeContent> {
+  List<Map<String, dynamic>> categories = [];
+  List<Map<String, dynamic>> featuredProducts = [];
+  List<Map<String, dynamic>> deals = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    await Future.wait([
+      fetchCategories(),
+      fetchFeaturedProducts(),
+      fetchDeals(),
+    ]);
+  }
+
+  Future<void> fetchCategories() async {
+    final response =
+        await http.get(Uri.parse('$apiBaseUrl/api/product/categories/'));
+    if (response.statusCode == 200) {
+      setState(() {
+        categories =
+            List<Map<String, dynamic>>.from(json.decode(response.body));
+      });
+    }
+  }
+
+  Future<void> fetchFeaturedProducts() async {
+    final response =
+        await http.get(Uri.parse('$apiBaseUrl/api/product/recommended/'));
+    if (response.statusCode == 200) {
+      setState(() {
+        featuredProducts =
+            List<Map<String, dynamic>>.from(json.decode(response.body));
+      });
+    }
+  }
+
+  Future<void> fetchDeals() async {
+    final response =
+        await http.get(Uri.parse('$apiBaseUrl/api/product/top-selling/'));
+    if (response.statusCode == 200) {
+      setState(() {
+        deals = List<Map<String, dynamic>>.from(json.decode(response.body));
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildSearchBar(),
-          _buildCategories(),
-          _buildFeaturedProducts(),
-          _buildDealsSection(),
-        ],
+    return Scaffold(
+      body: RefreshIndicator(
+        onRefresh: fetchData,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildSearchBar(),
+              _buildCategories(),
+              _buildFeaturedProducts(),
+              _buildDealsSection(),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -36,25 +103,25 @@ class HomeContent extends StatelessWidget {
   }
 
   Widget _buildCategories() {
-    final categories = ['Electronics', 'Books', 'Fashion', 'Home', 'Toys'];
     return SizedBox(
-      height: 100,
+      height: 120,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: categories.length,
         itemBuilder: (context, index) {
+          final cat = categories[index]; // cat est un Map<String, dynamic>
+          final name = cat['name']; // Accès à 'name' de la map
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundColor:
-                      Colors.primaries[index % Colors.primaries.length],
-                  child: Icon(Icons.category, color: Colors.white),
+                const CircleAvatar(
+                  radius: 35,
+                  backgroundColor: Colors.teal,
+                  child: Icon(Icons.category, color: Colors.white, size: 30),
                 ),
                 const SizedBox(height: 4),
-                Text(categories[index], style: const TextStyle(fontSize: 12)),
+                Text(name, style: const TextStyle(fontSize: 12)),
               ],
             ),
           );
@@ -70,38 +137,30 @@ class HomeContent extends StatelessWidget {
         const Padding(
           padding: EdgeInsets.all(8.0),
           child: Text('Featured Products',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         ),
         SizedBox(
-          height: 200,
+          height: 250,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: 5,
+            itemCount: featuredProducts.length,
             itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: 150,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 120,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Center(
-                            child: Icon(Icons.image,
-                                size: 50, color: Colors.grey[600])),
-                      ),
-                      const SizedBox(height: 4),
-                      Text('Product ${index + 1}',
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
-                      Text('\$${(index + 1) * 9.99}',
-                          style: const TextStyle(color: Colors.green)),
-                    ],
-                  ),
+              final product = featuredProducts[index];
+
+              final imageUrl = apiBaseUrl +
+                  product['images'][0][
+                      'image']; // Assure-toi d'utiliser `product` ici et non `deal`
+              final name = product['name'];
+              final price = product['price'];
+
+              return Container(
+                width: 180,
+                margin: const EdgeInsets.all(8.0),
+                child: HProductCard(
+                  image: imageUrl,
+                  name: name,
+                  price: price
+                      .toString(), // Convertir le prix en chaîne si nécessaire
                 ),
               );
             },
@@ -116,57 +175,40 @@ class HomeContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(10.0),
           child: Text('Deals of the Day',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         ),
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 0.75,
+            childAspectRatio: 0.7,
           ),
-          itemCount: 4,
+          itemCount: deals.length,
           itemBuilder: (context, index) {
-            return Card(
-              margin: const EdgeInsets.all(8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(4)),
-                      ),
-                      child: Center(
-                          child: Icon(Icons.image,
-                              size: 50, color: Colors.grey[600])),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Deal ${index + 1}',
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold)),
-                        Text('Up to ${(index + 1) * 10}% off',
-                            style: const TextStyle(color: Colors.red)),
-                        Text('\$${(index + 1) * 19.99}',
-                            style: const TextStyle(
-                                decoration: TextDecoration.lineThrough)),
-                        Text('\$${(index + 1) * 14.99}',
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+            final deal = deals[index];
+
+            final imageUrl = apiBaseUrl + deal['images'][0]['image'];
+            final name = deal['name'];
+            final rating = deal['average_rating'];
+            final description = deal['description'];
+            final reviewCount = deal['review_count'];
+            final id = deal['id'];
+            final price = deal['price'];
+
+            return ProductCard(
+              image: imageUrl,
+              id: id,
+              name: name,
+              description: description,
+              price: price.toString(),
+              rating: rating,
+              reviewCount: reviewCount,
+              onAddToCart: () {
+                print(id);
+              },
             );
           },
         ),

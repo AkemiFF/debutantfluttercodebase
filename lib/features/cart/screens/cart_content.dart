@@ -21,7 +21,7 @@ class CartItem {
 }
 
 class CartContent extends StatefulWidget {
-  const CartContent({Key? key}) : super(key: key);
+  const CartContent({super.key});
 
   @override
   _CartContentState createState() => _CartContentState();
@@ -41,7 +41,7 @@ class _CartContentState extends State<CartContent> {
 
   Future<void> fetchCartItems() async {
     // Simulating API call
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     setState(() {
       cartItems = [
         CartItem(
@@ -51,7 +51,7 @@ class _CartContentState extends State<CartContent> {
           price: 19.99,
           description: "Description 1",
           totalPrice: 39.98,
-          imageUrl: "https://via.placeholder.com/100",
+          imageUrl: "assets/images/placeholder.png",
         ),
         CartItem(
           productId: 2,
@@ -60,7 +60,7 @@ class _CartContentState extends State<CartContent> {
           price: 29.99,
           description: "Description 2",
           totalPrice: 29.99,
-          imageUrl: "https://via.placeholder.com/100",
+          imageUrl: "assets/images/placeholder.png",
         ),
       ];
       recommendedProducts = [
@@ -125,7 +125,7 @@ class _CartContentState extends State<CartContent> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     }
 
     return SingleChildScrollView(
@@ -135,7 +135,7 @@ class _CartContentState extends State<CartContent> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Votre panier', style: Theme.of(context).textTheme.bodyMedium),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             if (noCart)
               Card(
                 child: Padding(
@@ -155,68 +155,64 @@ class _CartContentState extends State<CartContent> {
                         children: [
                           Text('Articles dans votre panier',
                               style: Theme.of(context).textTheme.bodyMedium),
-                          SizedBox(height: 16),
-                          ...cartItems
-                              .map((item) => Padding(
-                                    padding:
-                                        const EdgeInsets.only(bottom: 16.0),
-                                    child: Row(
-                                      children: [
-                                        Image.network(
-                                            item.imageUrl ??
-                                                'assets/images/placeholder.png',
-                                            width: 80,
-                                            height: 80),r
-                                        SizedBox(width: 16),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                          const SizedBox(height: 16),
+                          ...cartItems.map((item) => Padding(
+                                padding: const EdgeInsets.only(bottom: 16.0),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                        item.imageUrl ??
+                                            'assets/images/placeholder.png',
+                                        width: 80,
+                                        height: 80),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(item.productName,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall),
+                                          Text(
+                                              '${item.price.toStringAsFixed(2)} €',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall),
+                                          Row(
                                             children: [
-                                              Text(item.productName,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall),
-                                              Text(
-                                                  '${item.price.toStringAsFixed(2)} €',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall),
-                                              Row(
-                                                children: [
-                                                  IconButton(
-                                                    icon: Icon(Icons.remove),
-                                                    onPressed: () =>
-                                                        handleLessProduct(
-                                                            item.productId),
-                                                  ),
-                                                  Text(
-                                                      item.quantity.toString()),
-                                                  IconButton(
-                                                    icon: Icon(Icons.add),
-                                                    onPressed: () =>
-                                                        handleMoreProduct(
-                                                            item.productId),
-                                                  ),
-                                                ],
+                                              IconButton(
+                                                icon: const Icon(Icons.remove),
+                                                onPressed: () =>
+                                                    handleLessProduct(
+                                                        item.productId),
+                                              ),
+                                              Text(item.quantity.toString()),
+                                              IconButton(
+                                                icon: const Icon(Icons.add),
+                                                onPressed: () =>
+                                                    handleMoreProduct(
+                                                        item.productId),
                                               ),
                                             ],
                                           ),
-                                        ),
-                                        IconButton(
-                                          icon: Icon(Icons.close),
-                                          onPressed: () =>
-                                              handleRemoveItem(item.productId),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ))
-                              .toList(),
+                                    IconButton(
+                                      icon: const Icon(Icons.close),
+                                      onPressed: () =>
+                                          handleRemoveItem(item.productId),
+                                    ),
+                                  ],
+                                ),
+                              )),
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Card(
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -225,43 +221,43 @@ class _CartContentState extends State<CartContent> {
                         children: [
                           Text('Résumé de la commande',
                               style: Theme.of(context).textTheme.bodyMedium),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Sous-total'),
+                              const Text('Sous-total'),
                               Text('${subtotal.toStringAsFixed(2)} €'),
                             ],
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Frais de livraison'),
+                              const Text('Frais de livraison'),
                               Text('${shipping.toStringAsFixed(2)} €'),
                             ],
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Total',
+                              const Text('Total',
                                   style:
                                       TextStyle(fontWeight: FontWeight.bold)),
                               Text('${total.toStringAsFixed(2)} €',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold)),
                             ],
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           ElevatedButton(
-                            child: Text('Procéder au paiement'),
                             onPressed: () {
                               // Navigate to checkout page
                             },
                             style: ElevatedButton.styleFrom(
-                              minimumSize: Size(double.infinity, 50),
+                              minimumSize: const Size(double.infinity, 50),
                             ),
+                            child: Text('Procéder au paiement'),
                           ),
                         ],
                       ),
@@ -270,15 +266,15 @@ class _CartContentState extends State<CartContent> {
                 ],
               ),
             if (!noCart) ...[
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
               Text('Recommandations',
                   style: Theme.of(context).textTheme.bodyMedium),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               GridView.count(
                 crossAxisCount: 2,
                 childAspectRatio: 0.7,
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 children: recommendedProducts
                     .map((product) => Card(
                           child: Padding(
@@ -293,7 +289,7 @@ class _CartContentState extends State<CartContent> {
                                         fit: BoxFit.cover),
                                   ),
                                 ),
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 Text(product['name'],
                                     style:
                                         Theme.of(context).textTheme.bodySmall),
