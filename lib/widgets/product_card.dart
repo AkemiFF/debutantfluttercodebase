@@ -79,7 +79,7 @@ class ProductCard extends StatelessWidget {
                     '\$$price',
                     style: const TextStyle(
                       fontSize: 14,
-                      color: Colors.green,
+                      color: AppColors.textSecondary,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -162,7 +162,10 @@ class ProductDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(name),
+        title: Text(
+          name,
+          style: const TextStyle(color: AppColors.secondary),
+        ),
         backgroundColor: AppColors.primary,
       ),
       body: SingleChildScrollView(
@@ -193,7 +196,7 @@ class ProductDetailsPage extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.normal,
-                      color: Colors.green,
+                      color: AppColors.textSecondary,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -236,7 +239,7 @@ class ProductDetailsPage extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        print(this.name);
+                        print(name);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,

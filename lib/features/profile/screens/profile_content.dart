@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ProfileContent extends StatefulWidget {
-  const ProfileContent({Key? key}) : super(key: key);
+  const ProfileContent({super.key});
 
   @override
   _ProfileContentState createState() => _ProfileContentState();
@@ -39,7 +39,7 @@ class _ProfileContentState extends State<ProfileContent> {
             items: []),
         Order(
             id: 2,
-            createdAt: DateTime.now().subtract(Duration(days: 2)),
+            createdAt: DateTime.now().subtract(const Duration(days: 2)),
             totalPrice: 149.99,
             status: "shipped",
             items: []),
@@ -74,7 +74,8 @@ class _ProfileContentState extends State<ProfileContent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Account', style: TextStyle(color: Colors.black)),
+        title:
+            const Text('Your Account', style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
         elevation: 0,
       ),
@@ -94,15 +95,15 @@ class _ProfileContentState extends State<ProfileContent> {
 
   Widget _buildSection(String title, Widget content) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Text(
               title,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
           ),
           content,
@@ -119,9 +120,9 @@ class _ProfileContentState extends State<ProfileContent> {
 
   Widget _buildOrderCard(Order order) {
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -129,24 +130,24 @@ class _ProfileContentState extends State<ProfileContent> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Order #${order.id}',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
                 Text('\$${order.totalPrice.toStringAsFixed(2)}',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
                 'Placed on ${DateFormat('MMMM d, yyyy').format(order.createdAt)}'),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text('Status: ${order.status.toUpperCase()}',
-                style: TextStyle(color: Colors.blue)),
-            SizedBox(height: 8),
+                style: const TextStyle(color: Colors.blue)),
+            const SizedBox(height: 8),
             ElevatedButton(
-              child: Text('View order details'),
               onPressed: () {
                 // Implement order details navigation
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
+              child: Text('View order details'),
             ),
           ],
         ),
@@ -156,24 +157,25 @@ class _ProfileContentState extends State<ProfileContent> {
 
   Widget _buildAddressesContent() {
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(address.name, style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(address.name,
+                style: const TextStyle(fontWeight: FontWeight.bold)),
             Text(address.address),
             Text('${address.city}, ${address.postalCode}'),
             Text(address.country),
             Text(address.phoneNumber),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
-              child: Text('Edit address'),
               onPressed: () {
                 // Implement address editing
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
+              child: Text('Edit address'),
             ),
           ],
         ),
@@ -191,9 +193,9 @@ class _ProfileContentState extends State<ProfileContent> {
 
   Widget _buildPaymentMethodCard(PaymentMethod method) {
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -201,16 +203,16 @@ class _ProfileContentState extends State<ProfileContent> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('${method.type} ending in ${method.last4}',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
                 Text('Expires ${method.expiry}'),
               ],
             ),
             ElevatedButton(
-              child: Text('Edit'),
               onPressed: () {
                 // Implement payment method editing
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
+              child: Text('Edit'),
             ),
           ],
         ),
@@ -239,11 +241,11 @@ class _ProfileContentState extends State<ProfileContent> {
 
   Widget _buildAccountOption(String title, IconData icon, VoidCallback onTap) {
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
         leading: Icon(icon, color: Colors.grey[600]),
         title: Text(title),
-        trailing: Icon(Icons.arrow_forward_ios, size: 16),
+        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
         onTap: onTap,
       ),
     );

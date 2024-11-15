@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shoplg/core/constants/colors.dart';
 
 class CartItem {
   final int productId;
@@ -256,8 +257,12 @@ class _CartContentState extends State<CartContent> {
                             },
                             style: ElevatedButton.styleFrom(
                               minimumSize: const Size(double.infinity, 50),
+                              backgroundColor: AppColors.primary,
                             ),
-                            child: Text('Procéder au paiement'),
+                            child: const Text(
+                              'Procéder au paiement',
+                              style: TextStyle(color: AppColors.secondary),
+                            ),
                           ),
                         ],
                       ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shoplg/core/constants/colors.dart';
 import 'package:shoplg/core/utils/api_base_url.dart';
 import 'package:shoplg/widgets/h_product_card.dart';
 import 'package:shoplg/widgets/product_card.dart';
@@ -117,7 +118,7 @@ class _HomeContentState extends State<HomeContent> {
               children: [
                 const CircleAvatar(
                   radius: 35,
-                  backgroundColor: Colors.teal,
+                  backgroundColor: AppColors.primary,
                   child: Icon(Icons.category, color: Colors.white, size: 30),
                 ),
                 const SizedBox(height: 4),
